@@ -1,0 +1,24 @@
+# Eclipse
+spring_boot_project/.classpath
+spring_boot_project/.project
+spring_boot_project/.settings/
+
+# Intellij
+spring_boot_project/.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+spring_boot_project/log/
+spring_boot_project/target/
+
+spring_boot_project/node_modules/
+spring_boot_project/package-lock.json
+
+#frontend
+
+spring_boot_project/src/main/frontend/node_modules/
+spring_boot_project/src/main/frontend/package-lock.json
