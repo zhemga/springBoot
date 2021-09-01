@@ -1,9 +1,7 @@
 package com.example.springboot.controllers;
 
-import com.example.springboot.entities.Animal;
 import com.example.springboot.entities.Role;
 import com.example.springboot.entities.User;
-import com.example.springboot.repositories.AnimalRepository;
 import com.example.springboot.repositories.RoleRepository;
 import com.example.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,70 +18,14 @@ import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/api")
-public class RestDbController {
-    private final AnimalRepository animalRepository;
+public class AuthController {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public RestDbController(AnimalRepository animalRepository, RoleRepository roleRepository, UserRepository userRepository) {
-        this.animalRepository = animalRepository;
+    public AuthController(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
-    }
-
-    //Animals CRUD
-    @PostMapping("/animals")
-    ResponseEntity<Animal> CreateAnimal(@RequestBody Animal item) {
-        try {
-            animalRepository.save(item);
-            return new ResponseEntity<>(item, HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/animals")
-    List<Animal> ReadAllAnimal() {
-        return StreamSupport.stream(animalRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/animals/{id}")
-    ResponseEntity<Animal> ReadAnimalById(@PathVariable Integer id) {
-        Optional<Animal> item = animalRepository.findById(id);
-
-        if (item.isPresent()) {
-            return new ResponseEntity<>(item.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PutMapping("/animals")
-    ResponseEntity<Animal> UpdateAnimal(@RequestBody Animal item) {
-        try {
-            if(animalRepository.findById(item.getId()) == null)
-                throw new NotFoundException("Wrong id!");
-
-            animalRepository.save(item);
-            return new ResponseEntity<>(item, HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/animals/{id}")
-    ResponseEntity<Integer> DeleteAnimal(@PathVariable Integer id) {
-        try {
-            animalRepository.deleteById(id);
-            return new ResponseEntity<>(id, HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     //Roles CRUD

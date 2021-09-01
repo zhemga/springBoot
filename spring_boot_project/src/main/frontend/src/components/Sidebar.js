@@ -1,16 +1,17 @@
 import React, { useState } from "react";
+import { connect } from 'react-redux';
 import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faHandHoldingUsd, faSignOutAlt, faTable, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faSignOutAlt, faTable, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { Routes } from "../routes";
 import ProfilePicture from "../assets/img/team/profile-picture-3.jpg";
 
-export default (props = {}) => {
+const Sidebar = (props = {}) => {
   const location = useLocation();
   const { pathname } = location;
   const [show, setShow] = useState(false);
@@ -64,6 +65,21 @@ export default (props = {}) => {
     );
   };
 
+  const guestNavItems = (
+    <>
+      <NavItem title="Login" link={Routes.Login.path} icon={faSignInAlt} />
+      <NavItem title="Register" link={Routes.Register.path} icon={faRegistered} />
+    </>
+  );
+
+  const userNavItems = (
+    <>
+      <NavItem title="Find a Doctor" link={Routes.Register.path} icon={faUserNurse} />
+      <NavItem title="Find a Hospital" link={Routes.Register.path} icon={faHospital} />
+      <NavItem title="Your Admissions" link={Routes.Register.path} icon={faCalendar} />
+    </>
+  );
+
   return (
     <>
       <Navbar expand={false} collapseOnSelect variant="dark" className="navbar-theme-primary px-4 d-md-none">
@@ -92,10 +108,13 @@ export default (props = {}) => {
             </div>
 
             <Nav className="flex-column pt-3 pt-md-0">
-              <Navbar.Brand className="m-3" href={Routes.DashboardOverview.path}><FontAwesomeIcon className="text-danger" icon={faHandHoldingMedical}/> <span class="border-bottom border-danger">Medical Cabinet</span></Navbar.Brand>
+              <Navbar.Brand className="m-3" href={Routes.DashboardOverview.path}><FontAwesomeIcon className="text-danger" icon={faHandHoldingMedical} /> <span class="border-bottom border-danger">Medical Cabinet</span></Navbar.Brand>
+
+              {props.auth.isLoggedIn ? userNavItems : guestNavItems}
+
+              <Dropdown.Divider className="my-3 border-indigo" />
 
               <NavItem title="Overview" link={Routes.DashboardOverview.path} icon={faChartPie} />
-              <NavItem title="Transactions" icon={faHandHoldingUsd} link={Routes.Transactions.path} />
               <NavItem title="Settings" icon={faCog} link={Routes.Settings.path} />
 
               <CollapsableNavItem eventKey="tables/" title="Tables" icon={faTable}>
@@ -108,8 +127,6 @@ export default (props = {}) => {
                 <NavItem title="404 Not Found" link={Routes.NotFound.path} />
                 <NavItem title="500 Server Error" link={Routes.ServerError.path} />
               </CollapsableNavItem>
-
-              <Dropdown.Divider className="my-3 border-indigo" />
 
               <CollapsableNavItem eventKey="components/" title="Components" icon={faBoxOpen}>
                 <NavItem title="Accordion" link={Routes.Accordions.path} />
@@ -137,3 +154,11 @@ export default (props = {}) => {
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+
+export default connect(mapStateToProps)(Sidebar);

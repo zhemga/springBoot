@@ -3,9 +3,8 @@ import React, {Component} from "react";
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faEnvelope, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
-import { faFacebookF, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { registerUser } from '../services/index';
-import { Col, Row, Form, Card, Button, FormCheck, Container, InputGroup, FormControl, Alert } from '@themesberg/react-bootstrap';
+import { Col, Row, Form, Card, Button, Container, InputGroup, Alert } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { Routes } from "../routes";
