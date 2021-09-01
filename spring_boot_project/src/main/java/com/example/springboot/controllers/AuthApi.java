@@ -5,7 +5,6 @@ import com.example.springboot.dto.AuthRequest;
 import com.example.springboot.dto.RegisterRequest;
 import com.example.springboot.dto.UserView;
 import com.example.springboot.repositories.UserRepository;
-import com.example.springboot.sockets.WebsocketServer;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

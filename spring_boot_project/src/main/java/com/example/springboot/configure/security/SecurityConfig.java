@@ -87,15 +87,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/users").hasAuthority(Roles.Admin)
 //                .antMatchers("/api/animals").authenticated()
 //                .antMatchers("/api/users").authenticated()
-                .antMatchers("/home").permitAll()
-                .antMatchers("/api/animals").permitAll()
-                .antMatchers("/api/users").permitAll()
-                .antMatchers(String.format("%s/**", restApiDocPath)).permitAll()
-                .antMatchers(String.format("%s/**", swaggerPath)).permitAll()
-                .antMatchers(String.format("/")).permitAll()
-                .antMatchers(String.format("/static/**")).permitAll()
-                .antMatchers(String.format("/login")).permitAll()
-                .antMatchers("/api/public/**").permitAll()
+
+//                .antMatchers("/home").permitAll()
+//                .antMatchers("/api/animals").permitAll()
+//                .antMatchers("/api/users").permitAll()
+//                .antMatchers(String.format("%s/**", restApiDocPath)).permitAll()
+//                .antMatchers(String.format("%s/**", swaggerPath)).permitAll()
+//                .antMatchers(String.format("/")).permitAll()
+//                .antMatchers(String.format("/static/**")).permitAll()
+//                .antMatchers(String.format("/volt-react-dashboard/**")).permitAll()
+//                .antMatchers(String.format("/login")).permitAll()
+//                .antMatchers("/api/public/**").permitAll();
+
+                .antMatchers("/").permitAll();
+
                 // Our public endpoints
 //                .antMatchers("/api/public/**").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/author/**").permitAll()
@@ -103,7 +108,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers(HttpMethod.GET, "/api/book/**").permitAll()
 //                .antMatchers(HttpMethod.POST, "/api/book/search").permitAll()
                 // Our private endpoints
-                .anyRequest().authenticated();
 //                .and()
 //                .formLogin()
 //                .loginPage("/login")

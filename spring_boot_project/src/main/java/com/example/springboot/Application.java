@@ -1,7 +1,6 @@
 package com.example.springboot;
 
 import com.example.springboot.proporties.FileStorageProperties;
-import com.example.springboot.sockets.WebsocketServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
