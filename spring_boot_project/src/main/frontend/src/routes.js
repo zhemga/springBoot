@@ -1,17 +1,15 @@
 
 export const Routes = {
     // pages
-    DashboardOverview: { path: "/" },
-    Transactions: { path: "/transactions" },
-    Settings: { path: "/settings" },
-    Upgrade: { path: "/upgrade" },
+    Main: { path: "/" },
     BootstrapTables: { path: "/tables/bootstrap-tables" },
-    Billing: { path: "/examples/billing" },
-    Invoice: { path: "/examples/invoice" },
     Login: { path: "/login" },
     Register: { path: "/register" },
     NotFound: { path: "/examples/404" },
     ServerError: { path: "/examples/500" },
+    FindDoctor: {path: "/findDoctor"},
+    FindHospital: {path: "/findHospital"},
+    ShowAdmissions: {path: "/showAdmissions"},
 
     // components
     Accordions: { path: "/components/accordions" },

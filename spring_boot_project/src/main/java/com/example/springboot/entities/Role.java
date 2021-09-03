@@ -4,9 +4,9 @@ import com.example.springboot.entities.User;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "roles")
+@JsonIgnoreProperties("users")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,7 @@ public class Role {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<User> users;
 
     public Role() {
@@ -30,5 +31,10 @@ public class Role {
 
     public Role(String name) {
         this.name = name;
+    }
+
+    public Role(String name, List<User> users) {
+        this.name = name;
+        this.users = users;
     }
 }

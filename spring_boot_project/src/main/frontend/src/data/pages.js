@@ -1,4 +1,3 @@
-
 import OverviewImg from "../assets/img/pages/overview.jpg";
 import TransactionsImg from "../assets/img/pages/transactions.jpg";
 import SettingsImg from "../assets/img/pages/settings.jpg";

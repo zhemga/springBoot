@@ -3,13 +3,15 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import { Routes } from "../routes";
 
 // pages
-import DashboardOverview from "./dashboard/DashboardOverview";
-import Settings from "./Settings";
+import Main from "./Main";
 import BootstrapTables from "./tables/BootstrapTables";
 import Login from "./Login";
 import Register from "./Register";
 import NotFoundPage from "./NotFound";
 import ServerError from "./ServerError";
+import FindDoctor from "./FindDoctor";
+import FindHospital from "./FindHospital";
+import ShowAdmissions from "./ShowAdmissions";
 
 // components
 import Sidebar from "../components/Sidebar";
@@ -84,9 +86,11 @@ export default () => (
     <RouteWithLoader exact path={Routes.ServerError.path} component={ServerError} />
 
     {/* pages */}
-    <RouteWithSidebar exact path={Routes.DashboardOverview.path} component={DashboardOverview} />
-    <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
+    <RouteWithSidebar exact path={Routes.Main.path} component={Main} />
     <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />
+    <RouteWithSidebar exact path={Routes.FindDoctor.path} component={FindDoctor} />
+    <RouteWithSidebar exact path={Routes.FindHospital.path} component={FindHospital} />
+    <RouteWithSidebar exact path={Routes.ShowAdmissions.path} component={ShowAdmissions} />
 
     {/* components */}
     <RouteWithSidebar exact path={Routes.Accordions.path} component={Accordion} />
@@ -105,7 +109,5 @@ export default () => (
     <RouteWithSidebar exact path={Routes.Tabs.path} component={Tabs} />
     <RouteWithSidebar exact path={Routes.Tooltips.path} component={Tooltips} />
     <RouteWithSidebar exact path={Routes.Toasts.path} component={Toasts} />
-
-    <Redirect to={Routes.DashboardOverview.path} />
   </Switch>
 );

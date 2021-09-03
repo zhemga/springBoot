@@ -4,7 +4,7 @@ import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faSignOutAlt, faTable, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faSignOutAlt, faTable, faTimes, faHome } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -74,9 +74,9 @@ const Sidebar = (props = {}) => {
 
   const userNavItems = (
     <>
-      <NavItem title="Find a Doctor" link={Routes.Register.path} icon={faUserNurse} />
-      <NavItem title="Find a Hospital" link={Routes.Register.path} icon={faHospital} />
-      <NavItem title="Your Admissions" link={Routes.Register.path} icon={faCalendar} />
+      <NavItem title="Find a Doctor" link={Routes.FindDoctor.path} icon={faUserNurse} />
+      <NavItem title="Find a Hospital" link={Routes.FindHospital.path} icon={faHospital} />
+      <NavItem title="Your Admissions" link={Routes.ShowAdmissions.path} icon={faCalendar} />
     </>
   );
 
@@ -108,14 +108,15 @@ const Sidebar = (props = {}) => {
             </div>
 
             <Nav className="flex-column pt-3 pt-md-0">
-              <Navbar.Brand className="m-3" href={Routes.DashboardOverview.path}><FontAwesomeIcon className="text-danger" icon={faHandHoldingMedical} /> <span class="border-bottom border-danger">Medical Cabinet</span></Navbar.Brand>
+              <Navbar.Brand className="m-3" href={Routes.Main.path}><FontAwesomeIcon className="text-secondary" icon={faHandHoldingMedical} /> <span class="border-bottom border-secondary">Medical Cabinet</span></Navbar.Brand>
 
-              {props.auth.isLoggedIn ? userNavItems : guestNavItems}
+              <NavItem title="Main Page" icon={faHome} link={Routes.Main.path} />
+
+              {/* {props.auth.isLoggedIn ? userNavItems : guestNavItems} */}
+              {userNavItems}
+              {guestNavItems}
 
               <Dropdown.Divider className="my-3 border-indigo" />
-
-              <NavItem title="Overview" link={Routes.DashboardOverview.path} icon={faChartPie} />
-              <NavItem title="Settings" icon={faCog} link={Routes.Settings.path} />
 
               <CollapsableNavItem eventKey="tables/" title="Tables" icon={faTable}>
                 <NavItem title="Bootstrap Table" link={Routes.BootstrapTables.path} />

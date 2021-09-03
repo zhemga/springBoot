@@ -17,10 +17,12 @@ public class Admission {
     private Date dateTime;
     @Column(nullable = false)
     private Boolean isHappened;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column(nullable = false)
+    private Boolean isCanceled;
+    @ManyToOne(cascade=CascadeType.MERGE,  fetch = FetchType.LAZY)
     @JoinColumn(name = "user_admissions_id")
     private User user;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.MERGE,  fetch = FetchType.LAZY)
     @JoinColumn(name = "medic_admissions_id")
     private User medic;
 }
