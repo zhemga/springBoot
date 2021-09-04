@@ -90,25 +90,14 @@ const Sidebar = (props = {}) => {
       <CSSTransition timeout={300} in={show} classNames="sidebar-transition">
         <SimpleBar className={`collapse ${showClass} sidebar d-md-block bg-primary text-white`}>
           <div className="sidebar-inner px-4 pt-3">
-            <div className="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
-              <div className="d-flex align-items-center">
-                <div className="user-avatar lg-avatar me-4">
-                  <Image src={ProfilePicture} className="card-img-top rounded-circle border-white" />
-                </div>
-                <div className="d-block">
-                  <h6>Hi, Jane</h6>
-                  <Button as={Link} variant="secondary" size="xs" to={Routes.Login.path} className="text-dark">
-                    <FontAwesomeIcon icon={faSignOutAlt} className="me-2" /> Sign Out
-                  </Button>
-                </div>
-              </div>
+            <div className="user-card d-flex d-md-none align-items-center justify-content-end justify-end-md-center pb-4">
               <Nav.Link className="collapse-close d-md-none" onClick={onCollapse}>
-                <FontAwesomeIcon icon={faTimes} />
+                <FontAwesomeIcon className="fa-2x" icon={faTimes} />
               </Nav.Link>
             </div>
 
             <Nav className="flex-column pt-3 pt-md-0">
-              <Navbar.Brand className="m-3" href={Routes.Main.path}><FontAwesomeIcon className="text-secondary" icon={faHandHoldingMedical} /> <span class="border-bottom border-secondary">Medical Cabinet</span></Navbar.Brand>
+              <Navbar.Brand className="m-3" href={Routes.Main.path}><FontAwesomeIcon className="text-secondary" icon={faHandHoldingMedical} /> <span className="border-bottom border-secondary">Medical Cabinet</span></Navbar.Brand>
 
               <NavItem title="Main Page" icon={faHome} link={Routes.Main.path} />
 

@@ -60,10 +60,10 @@ public class AuthApi {
     public ResponseEntity<UserView> register(@RequestBody @Valid RegisterRequest request) {
         try {
             if (userRepository.findByUsername(request.getUsername()) != null) {
-                return ResponseEntity.status(HttpStatus.IM_USED).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             if (!request.getPassword().equals(request.getPasswordConfirm())) {
-                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             com.example.springboot.entities.User user = new com.example.springboot.entities.User(request.getUsername(),
                     bCryptPasswordEncoder.encode(request.getPassword()));

@@ -5,12 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserNurse, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import CustomPagination from "../components/CustomPagination"
+import AdmissionModal from "../components/AdmissionModal"
+
+const rowsPerPage = 10;
 
 export default class FindDoctor extends Component {
+
     state = {
         data: [],
         oldUrl: "",
         request: this.props.location.hospitalName != null ? this.props.location.hospitalName : "",
+        page: 1
     };
 
     getBody = (rows) => {
@@ -20,6 +26,7 @@ export default class FindDoctor extends Component {
                     <tr>
                         <th className="border-0">Id</th>
                         <th className="border-0">Name/Surname</th>
+                        <th className="border-0">Email</th>
                         <th className="border-0">Specialities</th>
                         <th className="border-0">Hospital</th>
                         <th className="border-0">Make Admission</th>
@@ -60,16 +67,25 @@ export default class FindDoctor extends Component {
             );
         }
 
-        let rows = this.state.data.map((el) => {
-            let specialities = el.roles.filter(x => { return x.name != "User" && x.name != "Doctor"; }).map(x => x.name).join(", ");
+        let page = this.state.page;
+        let from = (page - 1) * 10;
+        let to = from + 10;
 
+        if (to > this.state.data.length)
+            to = this.state.data.length;
+
+        let rows = this.state.data.slice(from, to).map((el) => {
+            let specialities = el.roles.filter(x => { return x.name != "User" && x.name != "Doctor"; }).map(x => x.name).join(", ");
             return (
                 <tr>
                     <td>{el.id}</td>
                     <td>{el.name + " " + el.surname}</td>
+                    <td>{el.username}</td>
                     <td>{specialities}</td>
                     <td>{el.hospital.name}</td>
-                    <td><Button className="pt-0 pb-0">Make</Button></td>
+                    <td>
+                       <AdmissionModal doctorName={el.name + " " + el.surname} doctorEmail={el.username} hospitalName={el.hospital.name}></AdmissionModal>
+                    </td>
                 </tr>
             );
         });
@@ -83,8 +99,22 @@ export default class FindDoctor extends Component {
         });
     };
 
+    paginationClick = (page) => {
+        console.log(page);
+        this.setState({
+            page: page
+        });
+    };
+
     render() {
-        const { request } = this.state;
+        const { request, data } = this.state;
+
+        let totalRows = data.length;
+        let totalPages = 0;
+        if (totalRows % rowsPerPage == 0)
+            totalPages = totalRows / rowsPerPage;
+        else
+            totalPages = parseInt(totalRows / rowsPerPage + 1);
 
         return (
             <main>
@@ -99,8 +129,9 @@ export default class FindDoctor extends Component {
                     </InputGroup>
                 </Form>
                 <div className="card-body bg-white rounded border shadow mt-4">
-                    {this.getTable('http://localhost:8080/api/doctors/' + request)}
+                    {this.getTable('http://localhost:8080/api/doctors/' + request, 1)}
                 </div>
+                <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>
         );
     };

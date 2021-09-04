@@ -3,14 +3,17 @@ import axios from "axios";
 import { Table, Form, InputGroup, Button } from '@themesberg/react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHospital, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
 import { Routes } from "../routes";
+import CustomPagination from "../components/CustomPagination"
+
+const rowsPerPage = 10; 
 
 export default class FindHospital extends Component {
     state = {
         data: [],
         oldUrl: "",
         request: "",
+        page: 1
     };
 
     getBody = (rows) => {
@@ -60,7 +63,14 @@ export default class FindHospital extends Component {
             );
         }
 
-        let rows = this.state.data.map((el) => {
+        let page = this.state.page;
+        let from = (page - 1) * 10;
+        let to = from + 10;
+
+        if(to > this.state.data.length)
+            to = this.state.data.length;
+
+        let rows = this.state.data.slice(from, to).map((el) => {
             return (
                 <tr>
                     <td>{el.id}</td>
@@ -88,8 +98,23 @@ export default class FindHospital extends Component {
         });
     };
 
+    paginationClick = (page) => {
+        console.log(page);
+        this.setState({
+            page: page
+        });
+    };
+
     render() {
         const { request, data } = this.state;
+
+        let totalRows = data.length;
+        let totalPages = 0;
+        if (totalRows % rowsPerPage == 0)
+            totalPages = totalRows / rowsPerPage;
+        else
+            totalPages = parseInt(totalRows / rowsPerPage + 1);
+
 
         return (
             <main>
@@ -106,6 +131,7 @@ export default class FindHospital extends Component {
                 <div className="card-body bg-white rounded border shadow mt-4">
                     {this.getTable('http://localhost:8080/api/hospitals/' + request)}
                 </div>
+                <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>
         );
     };
