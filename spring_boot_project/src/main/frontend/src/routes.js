@@ -10,6 +10,10 @@ export const Routes = {
     FindDoctor: {path: "/findDoctor"},
     FindHospital: {path: "/findHospital"},
     ShowAdmissions: {path: "/showAdmissions"},
+    ControlAdmissions: {path: "/controlAdmissions"},
+    ControlHospitals: {path: "/controlHospitals"},
+    ControlRoles: {path: "/controlRoles"},
+    ControlUsers: {path: "/controlUsers"},
 
     // components
     Accordions: { path: "/components/accordions" },

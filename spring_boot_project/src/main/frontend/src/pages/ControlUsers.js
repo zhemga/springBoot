@@ -5,15 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHospital, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Routes } from "../routes";
 import CustomPagination from "../components/CustomPagination"
+import HospitalModal from "../components/HospitalModal";
+import MakeDoctorModal from "../components/MakeDoctorModal";
 
 const rowsPerPage = 10; 
 
-export default class FindHospital extends Component {
+export default class ControlUsers extends Component {
     state = {
         data: [],
         oldUrl: "",
         request: "",
-        page: 1
+        page: 1,
+        userName: "",
+        hospitalAddress: ""
     };
 
     getBody = (rows) => {
@@ -23,9 +27,10 @@ export default class FindHospital extends Component {
                     <tr>
                         <th className="border-0">Id</th>
                         <th className="border-0">Name</th>
-                        <th className="border-0">Address</th>
-                        <th className="border-0">Find on Map</th>
-                        <th className="border-0">Show Medics</th>
+                        <th className="border-0">Roles</th>
+                        <th className="border-0">Set Role</th>
+                        <th className="border-0">Make Doctor</th>
+                        <th className="border-0">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,10 +79,11 @@ export default class FindHospital extends Component {
             return (
                 <tr>
                     <td>{el.id}</td>
-                    <td>{el.name}</td>
-                    <td>{el.address}</td>
-                    <td><a className="btn btn-primary pt-0 pb-0" href={"https://maps.google.com/?q=" + el.address}>Find</a></td>
-                    <td><Button className="btn btn-primary pt-0 pb-0" onClick={() => { this.redirectToFindDoctor(el.name) }}>Show</Button></td>
+                    <td>{el.username}</td>
+                    <td>{el.roles.map(x => x.name).join(", ")}</td>
+                    <td><HospitalModal hospitalId={el.id} hospitalName={el.name} hospitalAddress={el.address} /> </td>
+                    <td><MakeDoctorModal hospitalId={el.id} hospitalName={el.name} hospitalAddress={el.address} /> </td>
+                    <td><Button className="btn btn-danger pt-0 pb-0" onClick={() => { this.deleteUser(el.id) }}>Delete</Button></td>
                 </tr>
             );
         });
@@ -85,12 +91,21 @@ export default class FindHospital extends Component {
         return this.getBody(rows);
     };
 
-    redirectToFindDoctor = (name) => {
-        this.props.history.push({
-            pathname: Routes.FindDoctor.path,
-            hospitalName: name,
-        });
-    };
+    deleteUser = (id) => {
+        axios
+            .delete("http://localhost:8080/api/users/" + id
+                , {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+            });
+    }
 
     credentialChange = event => {
         this.setState({
@@ -99,14 +114,13 @@ export default class FindHospital extends Component {
     };
 
     paginationClick = (page) => {
-        console.log(page);
         this.setState({
             page: page
         });
     };
 
     render() {
-        const { request, data } = this.state;
+        const { request, data, hospitalName, hospitalAddress } = this.state;
 
         let totalRows = data.length;
         let totalPages = 0;
@@ -120,7 +134,7 @@ export default class FindHospital extends Component {
             <main className="mt-4">
                 <center>
                     <FontAwesomeIcon className="fa-10x text-primary" icon={faHospital} />
-                    <h1 className="mt-2 text-primary">Hospitals</h1>
+                    <h1 className="mt-2 text-primary">Control Hospitals</h1>
                 </center>
                 <Form className="mb-3">
                     <InputGroup>
@@ -129,7 +143,7 @@ export default class FindHospital extends Component {
                     </InputGroup>
                 </Form>
                 <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
-                    {this.getTable('http://localhost:8080/api/hospitals/' + request)}
+                    {this.getTable('http://localhost:8080/api/users/' + request)}
                 </div>
                 <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>

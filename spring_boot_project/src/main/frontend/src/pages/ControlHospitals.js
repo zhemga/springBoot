@@ -5,15 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHospital, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Routes } from "../routes";
 import CustomPagination from "../components/CustomPagination"
+import HospitalModal from "../components/HospitalModal";
 
-const rowsPerPage = 10; 
+const rowsPerPage = 6; 
 
-export default class FindHospital extends Component {
+export default class ControlHospital extends Component {
     state = {
         data: [],
         oldUrl: "",
         request: "",
-        page: 1
+        page: 1,
+        hospitalName: "",
+        hospitalAddress: ""
     };
 
     getBody = (rows) => {
@@ -24,8 +27,8 @@ export default class FindHospital extends Component {
                         <th className="border-0">Id</th>
                         <th className="border-0">Name</th>
                         <th className="border-0">Address</th>
-                        <th className="border-0">Find on Map</th>
-                        <th className="border-0">Show Medics</th>
+                        <th className="border-0">Edit</th>
+                        <th className="border-0">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,8 +79,8 @@ export default class FindHospital extends Component {
                     <td>{el.id}</td>
                     <td>{el.name}</td>
                     <td>{el.address}</td>
-                    <td><a className="btn btn-primary pt-0 pb-0" href={"https://maps.google.com/?q=" + el.address}>Find</a></td>
-                    <td><Button className="btn btn-primary pt-0 pb-0" onClick={() => { this.redirectToFindDoctor(el.name) }}>Show</Button></td>
+                    <td><HospitalModal hospitalId={el.id} hospitalName={el.name} hospitalAddress={el.address} /> </td>
+                    <td><Button className="btn btn-danger pt-0 pb-0" onClick={() => { this.deleteHospital(el.id) }}>Delete</Button></td>
                 </tr>
             );
         });
@@ -85,12 +88,39 @@ export default class FindHospital extends Component {
         return this.getBody(rows);
     };
 
-    redirectToFindDoctor = (name) => {
-        this.props.history.push({
-            pathname: Routes.FindDoctor.path,
-            hospitalName: name,
-        });
-    };
+    createHospital = () => {
+        let data = { "name": this.state.hospitalName, "address": this.state.hospitalAddress };
+        axios
+            .post("http://localhost:8080/api/hospitals/",
+                data,
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+            });
+    }
+
+    deleteHospital = (id) => {
+        axios
+            .delete("http://localhost:8080/api/hospitals/" + id
+                , {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+            });
+    }
 
     credentialChange = event => {
         this.setState({
@@ -99,14 +129,13 @@ export default class FindHospital extends Component {
     };
 
     paginationClick = (page) => {
-        console.log(page);
         this.setState({
             page: page
         });
     };
 
     render() {
-        const { request, data } = this.state;
+        const { request, data, hospitalName, hospitalAddress } = this.state;
 
         let totalRows = data.length;
         let totalPages = 0;
@@ -120,8 +149,20 @@ export default class FindHospital extends Component {
             <main className="mt-4">
                 <center>
                     <FontAwesomeIcon className="fa-10x text-primary" icon={faHospital} />
-                    <h1 className="mt-2 text-primary">Hospitals</h1>
+                    <h1 className="mt-2 text-primary">Control Hospitals</h1>
                 </center>
+                <Form onSubmit={this.createHospital}>
+                    <Form.Label>Create New Hospital</Form.Label>
+                    <Form.Group className="mb-3">
+                        <Form.Control autoComplete="off" type="text" name="hospitalName" value={hospitalName} onChange={this.credentialChange} required placeholder="Name" />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Control autoComplete="off" type="text" name="hospitalAddress" value={hospitalAddress} onChange={this.credentialChange} required placeholder="Address" />
+                    </Form.Group>
+                    <center>
+                    <Button className="mb-3 btn-success" type="submit">Create</Button>
+                    </center>
+                </Form>
                 <Form className="mb-3">
                     <InputGroup>
                         <InputGroup.Text><FontAwesomeIcon icon={faSearch} /></InputGroup.Text>

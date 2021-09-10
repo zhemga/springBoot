@@ -34,6 +34,7 @@ export const logoutUser = () => {
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("username");
     localStorage.removeItem("roles");
+    window.location = "/";
     dispatch(success(false));
   };
 };

@@ -43,11 +43,11 @@ export default class FindDoctor extends Component {
         if (this.state.oldUrl != url) {
             axios
                 .get(url
-                    // , {
-                    //     headers: {
-                    //         Authorization: "Bearer " + localStorage.getItem("jwtToken")
-                    //     }
-                    // }
+                    , {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                        }
+                    }
                 )
                 .then((response) => {
                     this.setState(() => {
@@ -68,8 +68,8 @@ export default class FindDoctor extends Component {
         }
 
         let page = this.state.page;
-        let from = (page - 1) * 10;
-        let to = from + 10;
+        let from = (page - 1) * rowsPerPage;
+        let to = from + rowsPerPage;
 
         if (to > this.state.data.length)
             to = this.state.data.length;

@@ -4,7 +4,7 @@ import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faSignOutAlt, faTable, faTimes, faHome } from "@fortawesome/free-solid-svg-icons";
+import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faSignOutAlt, faTable, faTimes, faHome, faUser, faCalendarAlt, faScroll } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 import { isLoggedByJwt } from "../services/index";
@@ -78,6 +78,10 @@ const Sidebar = (props = {}) => {
       <NavItem title="Find a Doctor" link={Routes.FindDoctor.path} icon={faUserNurse} />
       <NavItem title="Find a Hospital" link={Routes.FindHospital.path} icon={faHospital} />
       <NavItem title="Your Admissions" link={Routes.ShowAdmissions.path} icon={faCalendar} />
+      <NavItem title="Control Admissions" link={Routes.ControlAdmissions.path} icon={faCalendarAlt} />
+      <NavItem title="Control Hospitals" link={Routes.ControlHospitals.path} icon={faHospital} />
+      <NavItem title="Control Roles" link={Routes.ControlRoles.path} icon={faScroll} />
+      <NavItem title="Control Users" link={Routes.ControlUsers.path} icon={faUser} />
     </>
   );
 

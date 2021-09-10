@@ -1,31 +1,32 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Table, Form, InputGroup, Button } from '@themesberg/react-bootstrap';
+import { Table, Form, InputGroup, Button, Badge } from '@themesberg/react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHospital, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Routes } from "../routes";
 import CustomPagination from "../components/CustomPagination"
 
-const rowsPerPage = 10; 
+const rowsPerPage = 10;
 
-export default class FindHospital extends Component {
+export default class ControlAdmissions extends Component {
     state = {
         data: [],
         oldUrl: "",
-        request: "",
         page: 1
     };
 
     getBody = (rows) => {
+
         return (
             <Table>
                 <thead className="thead-light">
                     <tr>
                         <th className="border-0">Id</th>
-                        <th className="border-0">Name</th>
-                        <th className="border-0">Address</th>
-                        <th className="border-0">Find on Map</th>
-                        <th className="border-0">Show Medics</th>
+                        <th className="border-0">Date</th>
+                        <th className="border-0">Status</th>
+                        <th className="border-0">User</th>
+                        <th className="border-0">Medic</th>
+                        <th className="border-0">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,30 +68,48 @@ export default class FindHospital extends Component {
         let from = (page - 1) * rowsPerPage;
         let to = from + rowsPerPage;
 
-        if(to > this.state.data.length)
+        if (to > this.state.data.length)
             to = this.state.data.length;
 
-        let rows = this.state.data.slice(from, to).map((el) => {
-            return (
-                <tr>
-                    <td>{el.id}</td>
-                    <td>{el.name}</td>
-                    <td>{el.address}</td>
-                    <td><a className="btn btn-primary pt-0 pb-0" href={"https://maps.google.com/?q=" + el.address}>Find</a></td>
-                    <td><Button className="btn btn-primary pt-0 pb-0" onClick={() => { this.redirectToFindDoctor(el.name) }}>Show</Button></td>
-                </tr>
-            );
-        });
+        let rows = this.state.data
+            .sort((x, y) => {
+                return (x.isHappened === y.isHappened) ? 0 : x.isHappened ? 1 : -1;
+            })
+            .sort((x, y) => {
+                return (x.isCanceled === y.isCanceled) ? 0 : x.isCanceled ? 1 : -1;
+            })
+            .slice(from, to).map((el) => {
+                return (
+                    <tr>
+                        <td>{el.id}</td>
+                        <td>{el.dateTime}</td>
+                        <td>{el.isHappened ? <Badge bg="success" text="dark" className="me-1">Is Happened</Badge> : el.isCanceled ? <Badge bg="danger" text="dark" className="me-1">Canceled</Badge> : <Badge bg="warning" text="dark" className="me-1">Not Happened</Badge>}</td>
+                        <td>{el.user.username}</td>
+                        <td>{el.medic.name + " " + el.medic.surname}</td>
+                        <td><Button className="btn btn-danger pt-0 pb-0" onClick={() => { this.deleteAdmission(el.id) }}>Delete</Button></td>
+                    </tr>
+                );
+            });
 
         return this.getBody(rows);
     };
 
-    redirectToFindDoctor = (name) => {
-        this.props.history.push({
-            pathname: Routes.FindDoctor.path,
-            hospitalName: name,
-        });
-    };
+    deleteAdmission = (id) => {
+        axios
+            .delete("http://localhost:8080/api/admissions/" + id
+                , {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+            });
+    }
+
 
     credentialChange = event => {
         this.setState({
@@ -99,7 +118,6 @@ export default class FindHospital extends Component {
     };
 
     paginationClick = (page) => {
-        console.log(page);
         this.setState({
             page: page
         });
@@ -119,17 +137,11 @@ export default class FindHospital extends Component {
         return (
             <main className="mt-4">
                 <center>
-                    <FontAwesomeIcon className="fa-10x text-primary" icon={faHospital} />
-                    <h1 className="mt-2 text-primary">Hospitals</h1>
+                    <FontAwesomeIcon className="fa-10x text-primary" icon={faCalendarAlt} />
+                    <h1 className="mt-2 text-primary">Control Admissions</h1>
                 </center>
-                <Form className="mb-3">
-                    <InputGroup>
-                        <InputGroup.Text><FontAwesomeIcon icon={faSearch} /></InputGroup.Text>
-                        <Form.Control autoFocus autoComplete="off" type="text" name="request" placeholder="Search" value={request} onChange={this.credentialChange} />
-                    </InputGroup>
-                </Form>
                 <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
-                    {this.getTable('http://localhost:8080/api/hospitals/' + request)}
+                    {this.getTable('http://localhost:8080/api/admissions/')}
                 </div>
                 <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>

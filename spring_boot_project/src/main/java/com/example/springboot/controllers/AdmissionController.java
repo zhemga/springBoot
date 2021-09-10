@@ -120,6 +120,24 @@ public class AdmissionController {
         }
     }
 
+    @GetMapping("/doctorAdmissions")
+    ResponseEntity<List<Admission>> ReadAllDoctor() {
+        try {
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            User medic = userRepository.findByUsername(userDetails.getUsername());
+
+            List<Admission> items = StreamSupport.stream(admissionRepository.findAll().spliterator(), false)
+                    .filter(x -> x.getMedic().getId() == medic.getId())
+                    .collect(Collectors.toList());
+
+            return new ResponseEntity<>(items, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/admissions/{id}")
     ResponseEntity<Admission> ReadById(@PathVariable Integer id) {
         Optional<Admission> item = admissionRepository.findById(id);

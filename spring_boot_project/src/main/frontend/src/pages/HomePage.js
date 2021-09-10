@@ -12,6 +12,10 @@ import ServerError from "./ServerError";
 import FindDoctor from "./FindDoctor";
 import FindHospital from "./FindHospital";
 import ShowAdmissions from "./ShowAdmissions";
+import ControlAdmissions from "./ControlAdmissions";
+import ControlHospitals from "./ControlHospitals";
+import ControlRoles from "./ControlRoles";
+import ControlUsers from "./ControlUsers";
 
 // components
 import Sidebar from "../components/Sidebar";
@@ -91,6 +95,10 @@ export default () => (
     <RouteWithSidebar exact path={Routes.FindDoctor.path} component={FindDoctor} />
     <RouteWithSidebar exact path={Routes.FindHospital.path} component={FindHospital} />
     <RouteWithSidebar exact path={Routes.ShowAdmissions.path} component={ShowAdmissions} />
+    <RouteWithSidebar exact path={Routes.ControlAdmissions.path} component={ControlAdmissions} />
+    <RouteWithSidebar exact path={Routes.ControlHospitals.path} component={ControlHospitals} />
+    <RouteWithSidebar exact path={Routes.ControlRoles.path} component={ControlRoles} />
+    <RouteWithSidebar exact path={Routes.ControlUsers.path} component={ControlUsers} />
 
     {/* components */}
     <RouteWithSidebar exact path={Routes.Accordions.path} component={Accordion} />

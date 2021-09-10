@@ -17,7 +17,7 @@ export default class ShowAdmissions extends Component {
 
     isDoctor = () => {
         let roles = JSON.parse(localStorage.getItem("roles"));
-        return roles.some(x => roles.authority == "Doctor");
+        return roles.some(x => x.authority == "Doctor");
     }
 
     getBody = (rows) => {
@@ -70,8 +70,8 @@ export default class ShowAdmissions extends Component {
         }
 
         let page = this.state.page;
-        let from = (page - 1) * 10;
-        let to = from + 10;
+        let from = (page - 1) * rowsPerPage;
+        let to = from + rowsPerPage;
 
         if (to > this.state.data.length)
             to = this.state.data.length;
@@ -98,8 +98,6 @@ export default class ShowAdmissions extends Component {
         return this.getBody(rows);
     };
 
-
-
     cancelAdmission = (id) => {
         axios
             .get("http://localhost:8080/api/cancelAdmission/" + id
@@ -115,6 +113,23 @@ export default class ShowAdmissions extends Component {
             .catch((error) => {
             });
     }
+
+    checkAdmission = (id) => {
+        axios
+            .get("http://localhost:8080/api/checkAdmission/" + id
+                , {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+            });
+    }
+
 
     credentialChange = event => {
         this.setState({
@@ -147,7 +162,7 @@ export default class ShowAdmissions extends Component {
                     <h1 className="mt-2 text-primary">Admissions</h1>
                 </center>
                 <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
-                    {this.getTable('http://localhost:8080/api/userAdmissions/')}
+                    {this.getTable(this.isDoctor() ? 'http://localhost:8080/api/doctorAdmissions/' : 'http://localhost:8080/api/userAdmissions/')}
                 </div>
                 <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>

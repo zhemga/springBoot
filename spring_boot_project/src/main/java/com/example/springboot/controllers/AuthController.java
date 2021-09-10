@@ -1,6 +1,7 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.constants.Roles;
+import com.example.springboot.entities.Hospital;
 import com.example.springboot.entities.Role;
 import com.example.springboot.entities.User;
 import com.example.springboot.repositories.RoleRepository;
@@ -37,8 +38,7 @@ public class AuthController {
         try {
             roleRepository.save(item);
             return new ResponseEntity<>(item, HttpStatus.OK);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -63,13 +63,12 @@ public class AuthController {
     @PutMapping("/roles")
     ResponseEntity<Role> UpdateRole(@RequestBody Role item) {
         try {
-            if(roleRepository.findById(item.getId()) == null)
+            if (roleRepository.findById(item.getId()) == null)
                 throw new NotFoundException("Wrong id!");
 
             roleRepository.save(item);
             return new ResponseEntity<>(item, HttpStatus.OK);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -79,8 +78,7 @@ public class AuthController {
         try {
             roleRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -91,8 +89,7 @@ public class AuthController {
         try {
             userRepository.save(item);
             return new ResponseEntity<>(item, HttpStatus.OK);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -100,6 +97,14 @@ public class AuthController {
     @GetMapping("/users")
     List<User> ReadAllUsers() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/users/{request}")
+    List<User> ReadAllUsers(@PathVariable String request) {
+        String requestLowerCase = request.toLowerCase(Locale.ROOT);
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .filter(item -> item.getUsername().toLowerCase(Locale.ROOT).contains(requestLowerCase))
                 .collect(Collectors.toList());
     }
 
@@ -122,7 +127,7 @@ public class AuthController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/usersById/{id}")
     ResponseEntity<User> ReadUserById(@PathVariable Integer id) {
         Optional<User> item = userRepository.findById(id);
 
@@ -136,13 +141,12 @@ public class AuthController {
     @PutMapping("/users")
     ResponseEntity<User> UpdateUser(@RequestBody User item) {
         try {
-            if(userRepository.findById(item.getId()) == null)
+            if (userRepository.findById(item.getId()) == null)
                 throw new NotFoundException("Wrong id!");
 
             userRepository.save(item);
             return new ResponseEntity<>(item, HttpStatus.OK);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -152,8 +156,7 @@ public class AuthController {
         try {
             userRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

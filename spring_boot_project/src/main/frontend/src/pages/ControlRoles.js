@@ -1,31 +1,30 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Table, Form, InputGroup, Button } from '@themesberg/react-bootstrap';
+import { Table, Form, InputGroup, Button, Badge } from '@themesberg/react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHospital, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarDay, faScroll, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Routes } from "../routes";
 import CustomPagination from "../components/CustomPagination"
 
-const rowsPerPage = 10; 
+const rowsPerPage = 10;
 
-export default class FindHospital extends Component {
+export default class ControlRoles extends Component {
     state = {
         data: [],
         oldUrl: "",
-        request: "",
-        page: 1
+        page: 1,
+        roleName: ""
     };
 
     getBody = (rows) => {
+
         return (
             <Table>
                 <thead className="thead-light">
                     <tr>
                         <th className="border-0">Id</th>
                         <th className="border-0">Name</th>
-                        <th className="border-0">Address</th>
-                        <th className="border-0">Find on Map</th>
-                        <th className="border-0">Show Medics</th>
+                        <th className="border-0">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,30 +66,57 @@ export default class FindHospital extends Component {
         let from = (page - 1) * rowsPerPage;
         let to = from + rowsPerPage;
 
-        if(to > this.state.data.length)
+        if (to > this.state.data.length)
             to = this.state.data.length;
 
-        let rows = this.state.data.slice(from, to).map((el) => {
-            return (
-                <tr>
-                    <td>{el.id}</td>
-                    <td>{el.name}</td>
-                    <td>{el.address}</td>
-                    <td><a className="btn btn-primary pt-0 pb-0" href={"https://maps.google.com/?q=" + el.address}>Find</a></td>
-                    <td><Button className="btn btn-primary pt-0 pb-0" onClick={() => { this.redirectToFindDoctor(el.name) }}>Show</Button></td>
-                </tr>
-            );
-        });
+        let rows = this.state.data
+            .slice(from, to).map((el) => {
+                return (
+                    <tr>
+                        <td>{el.id}</td>
+                        <td>{el.name}</td>
+                        <td><Button className="btn btn-danger pt-0 pb-0" onClick={() => { this.deleteRole(el.id) }}>Delete</Button></td>
+                    </tr>
+                );
+            });
 
         return this.getBody(rows);
     };
 
-    redirectToFindDoctor = (name) => {
-        this.props.history.push({
-            pathname: Routes.FindDoctor.path,
-            hospitalName: name,
-        });
-    };
+    createRole = () => {
+        let data = { "name": this.state.roleName };
+        axios
+            .post("http://localhost:8080/api/roles/",
+                data,
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+            });
+    }
+
+    deleteRole = (id) => {
+        axios
+            .delete("http://localhost:8080/api/roles/" + id
+                , {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+            });
+    }
+
 
     credentialChange = event => {
         this.setState({
@@ -99,14 +125,13 @@ export default class FindHospital extends Component {
     };
 
     paginationClick = (page) => {
-        console.log(page);
         this.setState({
             page: page
         });
     };
 
     render() {
-        const { request, data } = this.state;
+        const { roleName, data } = this.state;
 
         let totalRows = data.length;
         let totalPages = 0;
@@ -119,17 +144,18 @@ export default class FindHospital extends Component {
         return (
             <main className="mt-4">
                 <center>
-                    <FontAwesomeIcon className="fa-10x text-primary" icon={faHospital} />
-                    <h1 className="mt-2 text-primary">Hospitals</h1>
+                    <FontAwesomeIcon className="fa-10x text-primary" icon={faScroll} />
+                    <h1 className="mt-2 text-primary">Control Roles</h1>
                 </center>
-                <Form className="mb-3">
-                    <InputGroup>
-                        <InputGroup.Text><FontAwesomeIcon icon={faSearch} /></InputGroup.Text>
-                        <Form.Control autoFocus autoComplete="off" type="text" name="request" placeholder="Search" value={request} onChange={this.credentialChange} />
-                    </InputGroup>
+                <Form onSubmit={this.createRole}>
+                    <Form.Label>Create New Role</Form.Label>
+                    <Form.Group className="mb-3 d-flex flex-row w-100">
+                        <Form.Control autoComplete="off" type="text" name="roleName" value={roleName} onChange={this.credentialChange} required placeholder="Role Name" />
+                        <Button className="ms-2" type="submit">Create</Button>
+                    </Form.Group>
                 </Form>
                 <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
-                    {this.getTable('http://localhost:8080/api/hospitals/' + request)}
+                    {this.getTable('http://localhost:8080/api/roles/')}
                 </div>
                 <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>
