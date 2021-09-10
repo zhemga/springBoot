@@ -43,16 +43,16 @@ public class DatabaseLoader implements CommandLineRunner {
             this.hospitalRepository.save(new Hospital("Rivne Central Hospital", "Rivne, Chornovola st., 26"));
             this.hospitalRepository.save(new Hospital("Lutsk Central Hospital", "Lutsk, Chornovola st., 6"));
             this.hospitalRepository.save(new Hospital("Lviv Central Hospital", "Lviv, Chornovola st., 2"));
-            this.hospitalRepository.save(new Hospital("eu,", "6892 Natoque Ave"));
+            this.hospitalRepository.save(new Hospital("eu Hospital,", "6892 Natoque Ave"));
             this.hospitalRepository.save(new Hospital("Cras interdum. Nunc", "P.O. Box 450, 7716 Dolor Av."));
             this.hospitalRepository.save(new Hospital("libero. Proin sed", "P.O. Box 182, 4315 Nunc Road"));
             this.hospitalRepository.save(new Hospital("non sapien", "Ap #405-1326 Cum St."));
             this.hospitalRepository.save(new Hospital("sem ut", "549-6025 Mus. Av."));
             this.hospitalRepository.save(new Hospital("a,", "Ap #728-5706 Sem. Rd."));
-            this.hospitalRepository.save(new Hospital("eu", "Ap #412-6882 Pellentesque St."));
+            this.hospitalRepository.save(new Hospital("eu Hospital Center", "Ap #412-6882 Pellentesque St."));
             this.hospitalRepository.save(new Hospital("nisi dictum", "885-8522 Nisi. Rd."));
             this.hospitalRepository.save(new Hospital("elit.", "191-9767 Egestas St."));
-            this.hospitalRepository.save(new Hospital("ipsum non arcu.", "8538 Dolor Av."));
+            this.hospitalRepository.save(new Hospital("ipsum non arcu a.", "8538 Dolor Av."));
             this.hospitalRepository.save(new Hospital("elit. Curabitur", "9235 Metus. Rd."));
             this.hospitalRepository.save(new Hospital("libero lacus, varius", "2589 Lacus. St."));
             this.hospitalRepository.save(new Hospital("commodo auctor velit.", "3484 Risus, St."));
@@ -131,7 +131,7 @@ public class DatabaseLoader implements CommandLineRunner {
             this.hospitalRepository.save(new Hospital("parturient montes,", "7618 Mi Rd."));
             this.hospitalRepository.save(new Hospital("gravida nunc", "Ap #939-547 Eget, Street"));
             this.hospitalRepository.save(new Hospital("non,", "P.O. Box 641, 6577 Duis Road"));
-            this.hospitalRepository.save(new Hospital("ipsum non arcu.", "Ap #944-9005 Lobortis, Street"));
+            this.hospitalRepository.save(new Hospital("ipsum non arcu hj", "Ap #944-9005 Lobortis, Street"));
             this.hospitalRepository.save(new Hospital("libero", "Ap #806-4752 Elit, St."));
             this.hospitalRepository.save(new Hospital("ut mi.", "Ap #989-7243 Ac Rd."));
             this.hospitalRepository.save(new Hospital("ornare.", "692-6549 Sed, St."));

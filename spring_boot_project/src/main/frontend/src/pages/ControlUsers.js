@@ -82,7 +82,7 @@ export default class ControlUsers extends Component {
                     <td>{el.username}</td>
                     <td>{el.roles.map(x => x.name).join(", ")}</td>
                     <td><HospitalModal hospitalId={el.id} hospitalName={el.name} hospitalAddress={el.address} /> </td>
-                    <td><MakeDoctorModal hospitalId={el.id} hospitalName={el.name} hospitalAddress={el.address} /> </td>
+                    <td><MakeDoctorModal userId={el.id} /> </td>
                     <td><Button className="btn btn-danger pt-0 pb-0" onClick={() => { this.deleteUser(el.id) }}>Delete</Button></td>
                 </tr>
             );

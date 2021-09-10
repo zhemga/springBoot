@@ -9,8 +9,7 @@ import { Routes } from "../routes";
 export default (props) => {
     const [showDefault, setShowDefault] = useState(false);
     const handleClose = () => setShowDefault(false);
-    const { hospitalId } = props;
-    let { hospitalName, hospitalAddress } = props;
+    const { hospitalId, hospitalName, hospitalAddress } = props;
     const history = useHistory();
 
     const editHospital = function () {

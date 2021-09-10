@@ -16,9 +16,9 @@ public class Hospital {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(nullable = false, length = 256)
+    @Column(nullable = false, length = 256, unique = true)
     private String name;
-    @Column(nullable = false, length = 256)
+    @Column(nullable = false, length = 256, unique = true)
     private String address;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospital")
     private Collection<User> medics;

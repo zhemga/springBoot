@@ -1,9 +1,11 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.configure.security.JwtTokenUtil;
+import com.example.springboot.constants.Roles;
 import com.example.springboot.dto.AuthRequest;
 import com.example.springboot.dto.RegisterRequest;
 import com.example.springboot.dto.UserView;
+import com.example.springboot.repositories.RoleRepository;
 import com.example.springboot.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Tag(name = "Authentication")
 @RestController
@@ -33,6 +36,7 @@ public class AuthApi {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final RoleRepository roleRepository;
 
     @PostMapping("login")
     public ResponseEntity<UserView> login(@RequestBody @Valid AuthRequest request) {
@@ -67,7 +71,7 @@ public class AuthApi {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             com.example.springboot.entities.User user = new com.example.springboot.entities.User(request.getUsername(),
-                    bCryptPasswordEncoder.encode(request.getPassword()));
+                    bCryptPasswordEncoder.encode(request.getPassword()), Arrays.asList(roleRepository.findByName(Roles.User)));
             userRepository.save(user);
             return ResponseEntity.ok().build();
         } catch (BadCredentialsException ex) {

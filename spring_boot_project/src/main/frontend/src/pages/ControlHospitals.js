@@ -7,7 +7,7 @@ import { Routes } from "../routes";
 import CustomPagination from "../components/CustomPagination"
 import HospitalModal from "../components/HospitalModal";
 
-const rowsPerPage = 6; 
+const rowsPerPage = 6;
 
 export default class ControlHospital extends Component {
     state = {
@@ -70,7 +70,7 @@ export default class ControlHospital extends Component {
         let from = (page - 1) * rowsPerPage;
         let to = from + rowsPerPage;
 
-        if(to > this.state.data.length)
+        if (to > this.state.data.length)
             to = this.state.data.length;
 
         let rows = this.state.data.slice(from, to).map((el) => {
@@ -160,7 +160,7 @@ export default class ControlHospital extends Component {
                         <Form.Control autoComplete="off" type="text" name="hospitalAddress" value={hospitalAddress} onChange={this.credentialChange} required placeholder="Address" />
                     </Form.Group>
                     <center>
-                    <Button className="mb-3 btn-success" type="submit">Create</Button>
+                        <Button className="mb-3 btn-success" type="submit">Create</Button>
                     </center>
                 </Form>
                 <Form className="mb-3">

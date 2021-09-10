@@ -4,6 +4,7 @@ import com.example.springboot.constants.Roles;
 import com.example.springboot.entities.Hospital;
 import com.example.springboot.entities.Role;
 import com.example.springboot.entities.User;
+import com.example.springboot.repositories.HospitalRepository;
 import com.example.springboot.repositories.RoleRepository;
 import com.example.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -25,11 +23,13 @@ import java.util.stream.StreamSupport;
 public class AuthController {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final HospitalRepository hospitalRepository;
 
     @Autowired
-    public AuthController(RoleRepository roleRepository, UserRepository userRepository) {
+    public AuthController(RoleRepository roleRepository, UserRepository userRepository, HospitalRepository hospitalRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.hospitalRepository = hospitalRepository;
     }
 
     //Roles CRUD
@@ -84,11 +84,37 @@ public class AuthController {
     }
 
     //Users CRUD
-    @PostMapping("/users")
-    ResponseEntity<User> CreateUser(@RequestBody User item) {
+    @PostMapping("/makeDoctor")
+    ResponseEntity<User> MakeDoctor(@RequestBody User item) {
         try {
-            userRepository.save(item);
-            return new ResponseEntity<>(item, HttpStatus.OK);
+            User user = userRepository.findById(item.getId()).get();
+
+            if(user == null || user.getRoles().stream().anyMatch(x -> x.getName().equals(Roles.Doctor) || x.getName().equals(Roles.Admin)) ||
+                    item.getName() == null || item.getHospital().getName() == null || item.getRoles() == null)
+                throw new IllegalArgumentException();
+
+            List<Role> filterRoles = item.getRoles().stream().filter(x -> roleRepository.findByName(x.getName()) != null)
+                    .collect(Collectors.toList());
+
+            List<Role> newRoles = new ArrayList<>();
+
+            for (Role role: filterRoles) {
+                newRoles.add(roleRepository.findByName(role.getName()));
+            }
+
+            if(newRoles.isEmpty())
+                throw new IllegalArgumentException();
+
+            List<Role> roles = user.getRoles();
+            roles.addAll(newRoles);
+
+            user.setName(item.getName());
+            user.setSurname(item.getSurname());
+            user.setHospital(hospitalRepository.findByName(item.getHospital().getName()));
+            user.setRoles(roles);
+
+            userRepository.save(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -121,7 +147,9 @@ public class AuthController {
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
                 .filter(user -> user.isUserInRole(Roles.Doctor))
                 .filter(item -> item.getName().toLowerCase(Locale.ROOT).contains(requestLowerCase) ||
-                        item.getSurname().toLowerCase(Locale.ROOT).contains(requestLowerCase) || item.getHospital().getName().toLowerCase(Locale.ROOT).contains(requestLowerCase) ||
+                        item.getSurname().toLowerCase(Locale.ROOT).contains(requestLowerCase) ||
+                        item.getHospital().getName().toLowerCase(Locale.ROOT).contains(requestLowerCase) ||
+                        item.getUsername().toLowerCase(Locale.ROOT).contains(requestLowerCase) ||
                         item.getRoles().stream().filter(role -> !Roles.User.equals(role.getName()) && !Roles.Doctor.equals(role.getName()))
                                 .anyMatch(role -> role.getName().toLowerCase(Locale.ROOT).contains(requestLowerCase)))
                 .collect(Collectors.toList());
