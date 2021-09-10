@@ -99,7 +99,6 @@ export default class FindHospital extends Component {
     };
 
     paginationClick = (page) => {
-        console.log(page);
         this.setState({
             page: page
         });

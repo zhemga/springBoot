@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Table, Form, InputGroup, Button } from '@themesberg/react-bootstrap';
+import { Table, Form, InputGroup } from '@themesberg/react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserNurse, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import CustomPagination from "../components/CustomPagination"
 import AdmissionModal from "../components/AdmissionModal"
 
@@ -100,7 +98,6 @@ export default class FindDoctor extends Component {
     };
 
     paginationClick = (page) => {
-        console.log(page);
         this.setState({
             page: page
         });

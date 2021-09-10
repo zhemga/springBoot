@@ -8,7 +8,7 @@ import CustomPagination from "../components/CustomPagination"
 import HospitalModal from "../components/HospitalModal";
 import MakeDoctorModal from "../components/MakeDoctorModal";
 
-const rowsPerPage = 10; 
+const rowsPerPage = 10;
 
 export default class ControlUsers extends Component {
     state = {
@@ -28,8 +28,8 @@ export default class ControlUsers extends Component {
                         <th className="border-0">Id</th>
                         <th className="border-0">Name</th>
                         <th className="border-0">Roles</th>
-                        <th className="border-0">Set Role</th>
                         <th className="border-0">Make Doctor</th>
+                        <th className="border-0">Make User</th>
                         <th className="border-0">Delete</th>
                     </tr>
                 </thead>
@@ -72,7 +72,7 @@ export default class ControlUsers extends Component {
         let from = (page - 1) * rowsPerPage;
         let to = from + rowsPerPage;
 
-        if(to > this.state.data.length)
+        if (to > this.state.data.length)
             to = this.state.data.length;
 
         let rows = this.state.data.slice(from, to).map((el) => {
@@ -81,15 +81,31 @@ export default class ControlUsers extends Component {
                     <td>{el.id}</td>
                     <td>{el.username}</td>
                     <td>{el.roles.map(x => x.name).join(", ")}</td>
-                    <td><HospitalModal hospitalId={el.id} hospitalName={el.name} hospitalAddress={el.address} /> </td>
-                    <td><MakeDoctorModal userId={el.id} /> </td>
-                    <td><Button className="btn btn-danger pt-0 pb-0" onClick={() => { this.deleteUser(el.id) }}>Delete</Button></td>
+                    <td><MakeDoctorModal disabledButton={el.roles.some(x => x.name === "Doctor" || x.name === "Admin")} userId={el.id} /> </td>
+                    <td><Button disabled={!el.roles.some(x => x.name === "Doctor")} className="btn btn-primary pt-0 pb-0" onClick={() => { this.makeUser(el.id) }}>Make User</Button></td>
+                    <td><Button disabled={el.roles.some(x => x.name === "Admin")} className="btn btn-danger pt-0 pb-0" onClick={() => { this.deleteUser(el.id) }}>Delete</Button></td>
                 </tr>
             );
         });
 
         return this.getBody(rows);
     };
+
+    makeUser = (id) => {
+        axios
+            .get("http://localhost:8080/api/makeUser/" + id
+                , {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+            });
+    }
 
     deleteUser = (id) => {
         axios

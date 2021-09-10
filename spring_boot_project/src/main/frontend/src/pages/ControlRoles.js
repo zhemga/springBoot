@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Table, Form, InputGroup, Button, Badge } from '@themesberg/react-bootstrap';
+import { Table, Form, Button } from '@themesberg/react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDay, faScroll, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Routes } from "../routes";
+import { faScroll } from "@fortawesome/free-solid-svg-icons";
 import CustomPagination from "../components/CustomPagination"
 
 const rowsPerPage = 10;

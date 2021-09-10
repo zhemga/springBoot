@@ -50,6 +50,22 @@ export const isLoggedByJwt = () => {
   return isInUserRole && token != null && username != null;
 };
 
+export const isAdmin = () => {
+  let roles = localStorage.getItem("roles");
+  if (roles != null)
+    return JSON.parse(roles).some(x => x.authority === "Admin");
+
+  return false;
+};
+
+export const isDoctor = () => {
+  let roles = localStorage.getItem("roles");
+  if (roles != null)
+    return JSON.parse(roles).some(x => x.authority === "Doctor");
+
+  return false;
+};
+
 const success = (isLoggedIn) => {
   return {
     type: AT.SUCCESS,

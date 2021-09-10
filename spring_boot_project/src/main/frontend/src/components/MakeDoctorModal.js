@@ -8,7 +8,7 @@ import { faMehRollingEyes } from "@fortawesome/free-solid-svg-icons";
 export default (props) => {
     const [showDefault, setShowDefault] = useState(false);
     const handleClose = () => setShowDefault(false);
-    const { userId } = props;
+    const { userId, disabledButton } = props;
     const history = useHistory();
 
     const getHospitalsOptions = async function () {
@@ -97,7 +97,7 @@ export default (props) => {
 
     return (
         <React.Fragment>
-            <Button variant="secondary" className="pt-0 pb-0" onClick={() => setShowDefault(true)}>Make Doctor</Button>
+            <Button variant="secondary" disabled={disabledButton} className="pt-0 pb-0" onClick={() => setShowDefault(true)}>Make Doctor</Button>
 
             <Modal as={Modal.Dialog} centered show={showDefault} onHide={handleClose}>
                 <Modal.Header>

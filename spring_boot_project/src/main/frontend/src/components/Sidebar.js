@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faSignOutAlt, faTable, faTimes, faHome, faUser, faCalendarAlt, faScroll } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
-import { isLoggedByJwt } from "../services/index";
+import { isAdmin, isDoctor, isLoggedByJwt } from "../services/index";
 
 import { Routes } from "../routes";
 import ProfilePicture from "../assets/img/team/profile-picture-3.jpg";
@@ -73,15 +73,26 @@ const Sidebar = (props = {}) => {
     </>
   );
 
-  const userNavItems = (
+  const adminNavItems = (
     <>
-      <NavItem title="Find a Doctor" link={Routes.FindDoctor.path} icon={faUserNurse} />
-      <NavItem title="Find a Hospital" link={Routes.FindHospital.path} icon={faHospital} />
-      <NavItem title="Your Admissions" link={Routes.ShowAdmissions.path} icon={faCalendar} />
       <NavItem title="Control Admissions" link={Routes.ControlAdmissions.path} icon={faCalendarAlt} />
       <NavItem title="Control Hospitals" link={Routes.ControlHospitals.path} icon={faHospital} />
       <NavItem title="Control Roles" link={Routes.ControlRoles.path} icon={faScroll} />
       <NavItem title="Control Users" link={Routes.ControlUsers.path} icon={faUser} />
+    </>
+  );
+
+  const userNavItems = (
+    <>
+      <NavItem title="Find a Doctor" link={Routes.FindDoctor.path} icon={faUserNurse} />
+      <NavItem title="Find a Hospital" link={Routes.FindHospital.path} icon={faHospital} />
+    </>
+  );
+
+  const usersNavItems = (
+    <>
+      {isDoctor() || isAdmin() ? <></> : userNavItems}
+      {isAdmin() ? adminNavItems : <NavItem title="Your Admissions" link={Routes.ShowAdmissions.path} icon={faCalendar} />}
     </>
   );
 
@@ -104,42 +115,10 @@ const Sidebar = (props = {}) => {
             <Nav className="flex-column pt-3 pt-md-0">
               <Navbar.Brand className="m-3" href={Routes.Main.path}><FontAwesomeIcon className="text-secondary" icon={faHandHoldingMedical} /> <span className="border-bottom border-secondary">Medical Cabinet</span></Navbar.Brand>
 
-              <NavItem title="Main Page" icon={faHome} link={Routes.Main.path} />
-
-              {isLoggedByJwt() ? userNavItems : guestNavItems}
-
               <Dropdown.Divider className="my-3 border-indigo" />
-
-              <CollapsableNavItem eventKey="tables/" title="Tables" icon={faTable}>
-                <NavItem title="Bootstrap Table" link={Routes.BootstrapTables.path} />
-              </CollapsableNavItem>
-
-              <CollapsableNavItem eventKey="examples/" title="Page Examples" icon={faFileAlt}>
-                <NavItem title="Login" link={Routes.Login.path} />
-                <NavItem title="Register" link={Routes.Register.path} />
-                <NavItem title="404 Not Found" link={Routes.NotFound.path} />
-                <NavItem title="500 Server Error" link={Routes.ServerError.path} />
-              </CollapsableNavItem>
-
-              <CollapsableNavItem eventKey="components/" title="Components" icon={faBoxOpen}>
-                <NavItem title="Accordion" link={Routes.Accordions.path} />
-                <NavItem title="Alerts" link={Routes.Alerts.path} />
-                <NavItem title="Badges" link={Routes.Badges.path} />
-                <NavItem title="Breadcrumbs" link={Routes.Breadcrumbs.path} />
-                <NavItem title="Buttons" link={Routes.Buttons.path} />
-                <NavItem title="Forms" link={Routes.Forms.path} />
-                <NavItem title="Modals" link={Routes.Modals.path} />
-                <NavItem title="Navbars" link={Routes.Navbars.path} />
-                <NavItem title="Navs" link={Routes.Navs.path} />
-                <NavItem title="Pagination" link={Routes.Pagination.path} />
-                <NavItem title="Popovers" link={Routes.Popovers.path} />
-                <NavItem title="Progress" link={Routes.Progress.path} />
-                <NavItem title="Tables" link={Routes.Tables.path} />
-                <NavItem title="Tabs" link={Routes.Tabs.path} />
-                <NavItem title="Toasts" link={Routes.Toasts.path} />
-                <NavItem title="Tooltips" link={Routes.Tooltips.path} />
-              </CollapsableNavItem>
-
+              <NavItem title="Main Page" icon={faHome} link={Routes.Main.path} />
+              {isLoggedByJwt() ? usersNavItems : guestNavItems}
+              <Dropdown.Divider className="my-3 border-indigo" />
             </Nav>
           </div>
         </SimpleBar>

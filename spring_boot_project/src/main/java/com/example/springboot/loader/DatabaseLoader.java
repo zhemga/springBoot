@@ -146,6 +146,8 @@ public class DatabaseLoader implements CommandLineRunner {
         }
         if (this.userRepository.count() == 0) {
             this.userRepository.save(new User("semen@gmail.com", passwordEncoder.encode("123456"), Arrays.asList(roleRepository.findByName(Roles.User))));
+            this.userRepository.save(new User("oleh@gmail.com", passwordEncoder.encode("123456"), Arrays.asList(roleRepository.findByName(Roles.User))));
+            this.userRepository.save(new User("olha@gmail.com", passwordEncoder.encode("123456"), Arrays.asList(roleRepository.findByName(Roles.User))));
             this.userRepository.save(new User("admin@gmail.com", passwordEncoder.encode("123456"), Arrays.asList(roleRepository.findByName(Roles.User), roleRepository.findByName(Roles.Admin))));
             this.userRepository.save(new User("Oleh", "Kravchuk", "therapist@gmail.com", passwordEncoder.encode("123456"), hospitalRepository.findByName("Rivne Central Hospital"), Arrays.asList(roleRepository.findByName(Roles.User), roleRepository.findByName(Roles.Doctor), roleRepository.findByName(Roles.Therapist))));
             this.userRepository.save(new User("Oleksiy", "Tkachuk", "surgeon@gmail.com", passwordEncoder.encode("123456"), hospitalRepository.findByName("Lutsk Central Hospital"), Arrays.asList(roleRepository.findByName(Roles.User), roleRepository.findByName(Roles.Doctor), roleRepository.findByName(Roles.Surgeon))));

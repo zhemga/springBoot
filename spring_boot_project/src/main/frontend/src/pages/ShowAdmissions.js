@@ -138,7 +138,6 @@ export default class ShowAdmissions extends Component {
     };
 
     paginationClick = (page) => {
-        console.log(page);
         this.setState({
             page: page
         });

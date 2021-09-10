@@ -120,6 +120,22 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/makeUser/{id}")
+    ResponseEntity<User> MakeUser(@PathVariable Integer id) {
+        try {
+            User user = userRepository.findById(id).get();
+            List<Role> userRole = new ArrayList<Role>();
+            userRole.add(roleRepository.findByName("User"));
+            user.setRoles(userRole);
+            user.setHospital(null);
+            userRepository.save(user);
+
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/users")
     List<User> ReadAllUsers() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
