@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Table, Form, InputGroup, Button } from '@themesberg/react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHospital, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Routes } from "../routes";
+import { faUser, faSearch } from "@fortawesome/free-solid-svg-icons";
 import CustomPagination from "../components/CustomPagination"
-import HospitalModal from "../components/HospitalModal";
 import MakeDoctorModal from "../components/MakeDoctorModal";
 
 const rowsPerPage = 10;
@@ -125,8 +123,9 @@ export default class ControlUsers extends Component {
 
     credentialChange = event => {
         this.setState({
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
         });
+        this.paginationClick(1);
     };
 
     paginationClick = (page) => {
@@ -136,7 +135,7 @@ export default class ControlUsers extends Component {
     };
 
     render() {
-        const { request, data, hospitalName, hospitalAddress } = this.state;
+        const { request, data, page } = this.state;
 
         let totalRows = data.length;
         let totalPages = 0;
@@ -149,8 +148,8 @@ export default class ControlUsers extends Component {
         return (
             <main className="mt-4">
                 <center>
-                    <FontAwesomeIcon className="fa-10x text-primary" icon={faHospital} />
-                    <h1 className="mt-2 text-primary">Control Hospitals</h1>
+                    <FontAwesomeIcon className="fa-10x text-primary" icon={faUser} />
+                    <h1 className="mt-2 text-primary">Control Users</h1>
                 </center>
                 <Form className="mb-3">
                     <InputGroup>
@@ -161,7 +160,7 @@ export default class ControlUsers extends Component {
                 <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
                     {this.getTable('http://localhost:8080/api/users/' + request)}
                 </div>
-                <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
+                <CustomPagination currentPage={page} totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>
         );
     };

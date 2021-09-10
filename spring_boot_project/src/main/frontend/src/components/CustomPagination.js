@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Col, Card, Pagination } from '@themesberg/react-bootstrap';
+import { Pagination } from '@themesberg/react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDoubleLeft, faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
 
 export default (props) => {
-    const [activeItem, setActiveItem] = React.useState(1);
-    const { onChangeNumber, totalPages, size = "md", withIcons = false } = props;
+    const { currentPage, onChangeNumber, totalPages, size = "md", withIcons = false } = props;
+    const [activeItem, setActiveItem] = React.useState(currentPage ? currentPage : 1);
 
     const onPrevItem = () => {
         const prevActiveItem = activeItem === 1 ? activeItem : activeItem - 1;

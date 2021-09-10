@@ -96,6 +96,7 @@ export default class FindHospital extends Component {
         this.setState({
             [event.target.name]: event.target.value
         });
+        this.paginationClick(1);
     };
 
     paginationClick = (page) => {
@@ -105,7 +106,7 @@ export default class FindHospital extends Component {
     };
 
     render() {
-        const { request, data } = this.state;
+        const { request, data, page } = this.state;
 
         let totalRows = data.length;
         let totalPages = 0;
@@ -113,7 +114,6 @@ export default class FindHospital extends Component {
             totalPages = totalRows / rowsPerPage;
         else
             totalPages = parseInt(totalRows / rowsPerPage + 1);
-
 
         return (
             <main className="mt-4">
@@ -130,7 +130,7 @@ export default class FindHospital extends Component {
                 <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
                     {this.getTable('http://localhost:8080/api/hospitals/' + request)}
                 </div>
-                <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
+                <CustomPagination currentPage={page} totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>
         );
     };

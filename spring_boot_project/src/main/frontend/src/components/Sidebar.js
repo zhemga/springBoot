@@ -4,13 +4,12 @@ import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faSignOutAlt, faTable, faTimes, faHome, faUser, faCalendarAlt, faScroll } from "@fortawesome/free-solid-svg-icons";
+import { faHandHoldingMedical, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faTimes, faHome, faUser, faCalendarAlt, faScroll } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 import { isAdmin, isDoctor, isLoggedByJwt } from "../services/index";
 
 import { Routes } from "../routes";
-import ProfilePicture from "../assets/img/team/profile-picture-3.jpg";
 
 const Sidebar = (props = {}) => {
   const location = useLocation();

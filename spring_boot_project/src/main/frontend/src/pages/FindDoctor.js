@@ -93,8 +93,9 @@ export default class FindDoctor extends Component {
 
     credentialChange = event => {
         this.setState({
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
         });
+        this.paginationClick(1);
     };
 
     paginationClick = (page) => {
@@ -104,7 +105,7 @@ export default class FindDoctor extends Component {
     };
 
     render() {
-        const { request, data } = this.state;
+        const { request, data, page } = this.state;
 
         let totalRows = data.length;
         let totalPages = 0;
@@ -128,7 +129,7 @@ export default class FindDoctor extends Component {
                 <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
                     {this.getTable('http://localhost:8080/api/doctors/' + request, 1)}
                 </div>
-                <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
+                <CustomPagination currentPage={page} currentPage={page} totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />
             </main>
         );
     };

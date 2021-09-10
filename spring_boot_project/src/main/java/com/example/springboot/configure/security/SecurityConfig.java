@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -83,35 +84,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Set permissions on endpoints
         http.authorizeRequests()
                 // Swagger endpoints must be publicly accessible
-//                .antMatchers("/api/animals").hasAuthority(Roles.Admin)
-//                .antMatchers("/api/users").hasAuthority(Roles.Admin)
-//                .antMatchers("/api/animals").authenticated()
-//                .antMatchers("/api/users").authenticated()
+                .antMatchers(String.format("%s/**", restApiDocPath)).permitAll()
+                .antMatchers(String.format("%s/**", swaggerPath)).permitAll()
+                // Authenticated
+                .antMatchers("/api/users/**").hasAuthority(Roles.Admin)
+                .antMatchers("/api/usersById/**").hasAuthority(Roles.Admin)
+                .antMatchers("/api/roles/**").hasAuthority(Roles.Admin)
+                .antMatchers("/api/makeUser/**").hasAuthority(Roles.Admin)
+                .antMatchers("/api/makeDoctor/**").hasAuthority(Roles.Admin)
+                .antMatchers("/api/hospitalsById/**").hasAuthority(Roles.Admin)
+                .antMatchers(HttpMethod.DELETE, "/**").hasAuthority(Roles.Admin)
+                .antMatchers("/api/doctors/**").hasAuthority(Roles.User)
+                .antMatchers("/api/admissions/**").hasAuthority(Roles.User)
+                .antMatchers("/api/hospitals/**").hasAuthority(Roles.User)
+                .antMatchers("/api/cancelAdmission/**").hasAuthority(Roles.User)
+                .antMatchers("/api/checkAdmission/**").hasAuthority(Roles.Doctor)
+                // System public
+                .antMatchers(String.format("/login/**")).permitAll()
+                .antMatchers(String.format("/register/**")).permitAll()
+                .antMatchers(String.format("/static/**")).permitAll()
+                .antMatchers(String.format("/volt-react-dashboard/**")).permitAll();
 
-//                .antMatchers("/home").permitAll()
-//                .antMatchers("/api/animals").permitAll()
-//                .antMatchers("/api/users").permitAll()
-//                .antMatchers(String.format("%s/**", restApiDocPath)).permitAll()
-//                .antMatchers(String.format("%s/**", swaggerPath)).permitAll()
-//                .antMatchers(String.format("/")).permitAll()
-//                .antMatchers(String.format("/static/**")).permitAll()
-//                .antMatchers(String.format("/volt-react-dashboard/**")).permitAll()
-//                .antMatchers(String.format("/login")).permitAll()
-//                .antMatchers("/api/public/**").permitAll();
-
-                .antMatchers("/").permitAll();
-
-                // Our public endpoints
-//                .antMatchers("/api/public/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/author/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/author/search").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/book/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/book/search").permitAll()
-                // Our private endpoints
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll();
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }

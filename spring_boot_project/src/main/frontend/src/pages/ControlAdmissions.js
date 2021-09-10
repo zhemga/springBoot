@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Table, Form, InputGroup, Button, Badge } from '@themesberg/react-bootstrap';
+import { Table, Button, Badge } from '@themesberg/react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Routes } from "../routes";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import CustomPagination from "../components/CustomPagination"
 
 const rowsPerPage = 10;
@@ -113,7 +112,8 @@ export default class ControlAdmissions extends Component {
 
     credentialChange = event => {
         this.setState({
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
+            page: 1
         });
     };
 

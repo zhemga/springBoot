@@ -146,7 +146,8 @@ public class AuthController {
     List<User> ReadAllUsers(@PathVariable String request) {
         String requestLowerCase = request.toLowerCase(Locale.ROOT);
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
-                .filter(item -> item.getUsername().toLowerCase(Locale.ROOT).contains(requestLowerCase))
+                .filter(item -> item.getUsername().toLowerCase(Locale.ROOT).contains(requestLowerCase) ||
+                        item.getRoles().stream().anyMatch(x -> x.getName().toLowerCase(Locale.ROOT).contains(requestLowerCase)))
                 .collect(Collectors.toList());
     }
 

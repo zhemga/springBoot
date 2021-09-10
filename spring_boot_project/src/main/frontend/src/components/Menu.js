@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Nav, Form, Navbar, Container, InputGroup } from '@themesberg/react-bootstrap';
+import { Nav, Navbar, Container } from '@themesberg/react-bootstrap';
 import { logoutUser, isLoggedByJwt } from "../services/index";
 
 const Menu = (props) => {

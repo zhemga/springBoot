@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Modal, Form, Alert } from '@themesberg/react-bootstrap';
+import { Button, Modal, Form } from '@themesberg/react-bootstrap';
 import DatePicker from "./DatePicker"
 import moment from "moment";
 import { useHistory } from "react-router-dom";
