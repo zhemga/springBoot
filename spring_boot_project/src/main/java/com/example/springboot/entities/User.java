@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Data
 @Table(name="users")
 public class User {
     @Id
@@ -69,5 +68,16 @@ public class User {
     public Boolean isUserInRole(String roleName) {
         Boolean res = this.getRoles().stream().anyMatch(role -> roleName.equals(role.getName()));
         return res;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", username='" + username + '\'' +
+                ", enabled=" + enabled +
+                '}';
     }
 }

@@ -1,14 +1,45 @@
 import React, { useState } from "react";
-import { Button, Modal, Form } from '@themesberg/react-bootstrap';
+import axios from "axios";
+import { Button, Modal, Form, Alert } from '@themesberg/react-bootstrap';
 import DatePicker from "./DatePicker"
+import moment from "moment";
+import { useHistory } from "react-router-dom";
+import { Routes } from "../routes";
 
 export default (props) => {
     const [showDefault, setShowDefault] = useState(false);
     const handleClose = () => setShowDefault(false);
     const { doctorName, doctorEmail, hospitalName } = props;
+    const history = useHistory();
+
+    let time = moment().add(1, 'days').set({ h: 8, m: 0 }).format("DD/MM/YYYY HH:mm");
 
     const createAdmission = function () {
-        console.log("d");
+        let data = { dateTime: time, medic: { username: doctorEmail } };
+
+        axios
+            .post("http://localhost:8080/api/admissions/", data,
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwtToken")
+                    }
+                }
+            )
+            .then((response) => {
+                history.push(Routes.ShowAdmissions.path);
+            })
+            .catch(error => {
+                console.log(error.response.status);
+
+                if (error.response.status === 500)
+                    history.push(Routes.ServerError.path);
+                else if (error.response.status === 404)
+                    history.push(Routes.NotFound.path);
+            });
+    };
+
+    const timeSelection = function (selectedTime) {
+        time = selectedTime;
     };
 
     return (
@@ -27,7 +58,7 @@ export default (props) => {
                         <span className="h6">Email: </span> {doctorEmail}<br />
                         <span className="h6">Hospital: </span> {hospitalName}<br />
                         <p className="h6 mt-2">Select Date: </p>
-                        <DatePicker />
+                        <DatePicker onTimeSelection={timeSelection} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" type="submit">

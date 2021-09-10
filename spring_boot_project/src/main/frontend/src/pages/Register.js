@@ -31,7 +31,7 @@ class Register extends Component {
       if (this.props.user.isRegistered) {
         this.props.history.push("/login");
       }
-      else if (this.props.user.error != null) {
+      else if (this.props.user.error !== null) {
         this.setState({ "error": this.props.user.error });
         this.resetLoginForm();
       }
@@ -104,7 +104,7 @@ class Register extends Component {
                       </Form.Group>
 
                       <Button variant="primary" className="w-100" onClick={this.validateUser}
-                      disabled={this.state.username.length === 0 || this.state.password.length < 6 || this.state.passwordConfirm.length < 6 || this.state.password != this.state.passwordConfirm}>
+                      disabled={this.state.username.length === 0 || this.state.password.length < 6 || this.state.passwordConfirm.length < 6 || this.state.password !== this.state.passwordConfirm}>
                         Sign up
                       </Button>
                     </Form>

@@ -117,7 +117,7 @@ export default class FindHospital extends Component {
 
 
         return (
-            <main>
+            <main className="mt-4">
                 <center>
                     <FontAwesomeIcon className="fa-10x text-primary" icon={faHospital} />
                     <h1 className="mt-2 text-primary">Hospitals</h1>
@@ -128,7 +128,7 @@ export default class FindHospital extends Component {
                         <Form.Control autoFocus autoComplete="off" type="text" name="request" placeholder="Search" value={request} onChange={this.credentialChange} />
                     </InputGroup>
                 </Form>
-                <div className="card-body bg-white rounded border shadow mt-4">
+                <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
                     {this.getTable('http://localhost:8080/api/hospitals/' + request)}
                 </div>
                 <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />

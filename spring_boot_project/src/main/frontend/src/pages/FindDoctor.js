@@ -117,7 +117,7 @@ export default class FindDoctor extends Component {
             totalPages = parseInt(totalRows / rowsPerPage + 1);
 
         return (
-            <main>
+            <main className="mt-4">
                 <center>
                     <FontAwesomeIcon className="fa-10x text-primary" icon={faUserNurse} />
                     <h1 className="mt-2 text-primary">Doctors</h1>
@@ -128,7 +128,7 @@ export default class FindDoctor extends Component {
                         <Form.Control autoFocus autoComplete="off" type="text" name="request" placeholder="Search" value={request} onChange={this.credentialChange} />
                     </InputGroup>
                 </Form>
-                <div className="card-body bg-white rounded border shadow mt-4">
+                <div className="card-body bg-white rounded border shadow mt-4 overflow-auto">
                     {this.getTable('http://localhost:8080/api/doctors/' + request, 1)}
                 </div>
                 <CustomPagination totalPages={totalPages} withIcons className="mt-4" onChangeNumber={this.paginationClick} />

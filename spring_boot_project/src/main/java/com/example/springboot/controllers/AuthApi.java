@@ -47,6 +47,7 @@ public class AuthApi {
                     .findByUsername(user.getUsername());
             UserView userView = new UserView();
             userView.setUsername(user.getUsername());
+            userView.setRoles(user.getAuthorities());
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateAccessToken(dbUser))

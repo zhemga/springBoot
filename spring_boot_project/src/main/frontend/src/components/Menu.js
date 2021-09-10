@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Form, Navbar, Container, InputGroup } from '@themesberg/react-bootstrap';
-import { logoutUser } from "../services/index";
+import { logoutUser, isLoggedByJwt } from "../services/index";
 
 const Menu = (props) => {
   const logout = () => {
@@ -19,16 +19,17 @@ const Menu = (props) => {
 
   const userLinks = (
     <>
+      <Nav.Item className="mt-2">Hello, {localStorage.getItem("username")}</Nav.Item>
       <Nav.Link href="#" onClick={logout}>Logout</Nav.Link>
     </>
   );
 
   return (
-    <Navbar variant="dark" expanded className="ps-0 pe-2 pb-0">
+    <Navbar variant="dark" expanded className="ps-0 pe-2 pb-0 ms-n3 me-n3 pb-3">
       <Container fluid className="px-0">
         <div className="d-flex justify-content-end w-100">
           <div className="d-flex flex-nowrap flex-row">
-            {props.auth.isLoggedIn ? userLinks : guestLinks}
+            {isLoggedByJwt() ? userLinks : guestLinks}
           </div>
         </div>
       </Container>

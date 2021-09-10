@@ -3,7 +3,7 @@ import { Col, Row, Container } from '@themesberg/react-bootstrap';
 
 export default () => (
   <main class="ms-n3 me-n3">
-    <section className="section-header overflow-hidden pt-5 pt-lg-6 pb-9 pb-lg-12 bg-indigo text-white mt-3" id="home">
+    <section className="section-header overflow-hidden pt-5 pt-lg-6 pb-9 pb-lg-12 bg-indigo text-white" id="home">
       <Container>
         <Row>
           <Col xs={12} className="text-center">

@@ -6,29 +6,40 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default (props) => {
-    const [day, setDay] = React.useState("");
+    const [dateTime, setDay] = React.useState("");
+    const { onTimeSelection } = props;
+
+    const initTime = moment().add(1, 'days').set({ h: 8, m: 0 });
 
     const valid = function (current) {
         return current.isAfter(moment());
     };
 
+    const getTime = function () {
+        return dateTime ? moment(dateTime).format("DD/MM/YYYY HH:mm") : initTime.format("DD/MM/YYYY HH:mm");
+    };
+
     return (
         <Form.Group className="mb-3">
             <Datetime
+                onClose={() => { onTimeSelection(getTime()) }}
+                initialValue={initTime}
                 isValidDate={valid}
-                timeFormat={false}
+                dateFormat={"HH:mm"}
+                timeFormat={"HH:mm"}
                 closeOnSelect={false}
                 onChange={setDay}
+                timeConstraints={{ hours: { min: 8, max: 19, }, minutes: { step: 15 } }}
                 renderInput={(props, openCalendar) => (
                     <InputGroup>
                         <InputGroup.Text><FontAwesomeIcon icon={faCalendarAlt} /></InputGroup.Text>
                         <Form.Control
                             required
                             type="text"
-                            value={day ? moment(day).format("DD/MM/YYYY") : ""}
-                            placeholder="dd/mm/yyyy"
+                            value={getTime()}
+                            placeholder="DD/MM/YYYY HH:mm"
                             onFocus={openCalendar}
-                            onChange={() => { }} />
+                        />
                     </InputGroup>
                 )} />
         </Form.Group>

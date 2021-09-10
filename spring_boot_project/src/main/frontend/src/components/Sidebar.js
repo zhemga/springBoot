@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandHoldingMedical, faBoxOpen, faChartPie, faCog, faFileAlt, faUserNurse, faCalendar, faHospital, faRegistered, faSignInAlt, faSignOutAlt, faTable, faTimes, faHome } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
+import { isLoggedByJwt } from "../services/index";
 
 import { Routes } from "../routes";
 import ProfilePicture from "../assets/img/team/profile-picture-3.jpg";
@@ -101,9 +102,7 @@ const Sidebar = (props = {}) => {
 
               <NavItem title="Main Page" icon={faHome} link={Routes.Main.path} />
 
-              {/* {props.auth.isLoggedIn ? userNavItems : guestNavItems} */}
-              {userNavItems}
-              {guestNavItems}
+              {isLoggedByJwt() ? userNavItems : guestNavItems}
 
               <Dropdown.Divider className="my-3 border-indigo" />
 

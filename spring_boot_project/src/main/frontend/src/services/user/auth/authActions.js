@@ -15,22 +15,38 @@ export const authenticateUser = (username, password) => {
       .then((response) => {
         let token = response.headers.authorization;
         localStorage.setItem("jwtToken", token);
+        localStorage.setItem("roles", JSON.stringify(response.data.roles));
+        localStorage.setItem("username", JSON.stringify(response.data.username));
         dispatch(success({ username: response.data.username, isLoggedIn: true }));
       })
       .catch((error) => {
-        dispatch(failure({isError: true}));
+        dispatch(failure({ isError: true }));
       })
-      
+
   };
 };
+
 export const logoutUser = () => {
   return (dispatch) => {
     dispatch({
       type: AT.LOGOUT_REQUEST,
     });
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("username");
+    localStorage.removeItem("roles");
     dispatch(success(false));
   };
+};
+
+export const isLoggedByJwt = () => {
+  let token = localStorage.getItem("jwtToken");
+  let username = localStorage.getItem("username");
+  let roles = localStorage.getItem("roles");
+  let isInUserRole = false;
+  if (roles != null)
+    isInUserRole = JSON.parse(roles).some(x => x.authority == "User");
+
+  return isInUserRole && token != null && username != null;
 };
 
 const success = (isLoggedIn) => {
