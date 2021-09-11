@@ -88,7 +88,7 @@ export default class ShowAdmissions extends Component {
                         <td>{el.id}</td>
                         <td>{el.dateTime}</td>
                         <td>{el.isHappened ? <Badge bg="success" text="dark" className="me-1">Is Happened</Badge> : el.isCanceled ? <Badge bg="danger" text="dark" className="me-1">Canceled</Badge> : <Badge bg="warning" text="dark" className="me-1">Not Happened</Badge>}</td>
-                        {this.isDoctor() ? <><td>{el.user.username}</td> <td><Button className="btn btn-primary pt-0 pb-0" disabled={el.isHappened} onClick={() => { this.checkAdmission(el.id) }}>Happened</Button></td></> : <><td>{el.medic.name + " " + el.medic.surname}</td> <td>{el.medic.hospital.name}</td> <td>{el.medic.hospital.address}</td></>}
+                        {this.isDoctor() ? <><td>{el.user.username}</td> <td><Button className="btn btn-primary pt-0 pb-0" disabled={el.isCanceled || el.isHappened} onClick={() => { this.checkAdmission(el.id) }}>Happened</Button></td></> : <><td>{el.medic.name + " " + el.medic.surname}</td> <td>{el.medic.hospital.name}</td> <td>{el.medic.hospital.address}</td></>}
                         <td><Button className="btn btn-danger pt-0 pb-0" disabled={el.isCanceled || el.isHappened} onClick={() => { this.cancelAdmission(el.id) }}>Cancel</Button></td>
                     </tr>
                 );
